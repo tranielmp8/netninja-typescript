@@ -1,49 +1,57 @@
 
-import {appendFileSync} from 'fs'
-// CSVWriter project
+// Generics 101
 
-interface Payment {
-  id: number 
-  amount: number 
-  to: string 
-  notes: string 
+function logAndReturnString(val: string): string {
+  console.log(val)
+  return val 
+}
+function logAndReturnNumber(val: number): number {
+  console.log(val)
+  return val 
+}
+function logAndReturnBoolean(val: boolean): boolean {
+  console.log(val)
+  return val 
 }
 
-type PaymentColumns = ('id' | 'amount' | 'to' | 'notes')[]
+// function logAndReturnValue(val: any): any {
+//   console.log(val);
+//   return val 
+// }
 
-class CSVWriter {
-  constructor(private columns: PaymentColumns) {
-    this.csv = this.columns.join(',') + '\n'
-  }
+// const result = logAndReturnValue('Hello'); ,<- any type is not ideal for typescript
 
-  private csv: string 
-
-  save(filename: string): void {
-    appendFileSync(filename, this.csv)
-    this.csv = '\n'
-
-    console.log('file saved to', filename);
-  }
-
-  addRows(values: Payment[]): void {
-    let rows = values.map((v) => this.formatRow(v))
-
-    this.csv += rows.join('\n') + '\n'
-
-    console.log(this.csv)
-  }
-
-  private formatRow(p: Payment): string {
-    return this.columns.map((col) => p[col]).join(',')
-  }
+function logAndReturnGenericValue<T>(val: T): T {
+  console.log(val);
+  return val
 }
 
-const writer = new CSVWriter(['id', 'amount', 'to', 'notes'])
+const resultOne = logAndReturnGenericValue<string>('kakashi');
+const resultTwo = logAndReturnGenericValue<number>(8);
+const resultThree = logAndReturnGenericValue<boolean>(true);
 
-writer.addRows([
-  {id: 1, amount: 25, to:'kakashi', notes: 'That copy ninja'},
-  {id: 2, amount: 16, to:'naruto', notes: 'That cloning ninja'}
-])
+// example 2
 
-writer.save('./data/payments.csv')
+function getRandomArrayValue<T>(values: T[]): T {
+  const i = Math.floor(Math.random() * values.length)
+
+  return values[i]
+}
+
+interface User {
+  name: string
+  score: number 
+}
+
+const users: User[] = [
+  {name: 'kakashi', score: 100},
+  {name: 'jaraiyah', score: 90},
+  {name: 'naruto', score: 85},
+  {name: 'sakura', score: 80},
+]
+
+const randomUser = getRandomArrayValue<User>(users)
+console.log(randomUser);
+
+
 
