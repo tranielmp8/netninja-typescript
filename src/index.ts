@@ -1,40 +1,30 @@
-// Generic Class
+//-----------------------
+// CSV Writer - Refactor
+//-----------------------
 
-class DataCollection<T> {
-  constructor(private data: T[]) {}
+import { appendFileSync } from 'fs'
 
-  loadOne(): T {
-    const i = Math.floor(Math.random() * this.data.length)
-    return this.data[i];
-  }
-  loadAll(): T[] {
-    return this.data
-  }
-  add(val: T): T[] {
-    this.data.push(val)
-    return this.data 
-  }
+export class CSVWriter<T> {
+	constructor(private columns: (keyof T)[]) {
+		this.csv = this.columns.join(',') + '\n'
+	}
+
+	private csv: string
+
+	save(filename: string): void {
+		appendFileSync(filename, this.csv)
+		this.csv = '\n'
+
+		console.log('file saved to', filename)
+	}
+
+	addRows(values: T[]): void {
+		let rows = values.map((v) => this.formatRow(v))
+
+		this.csv += rows.join('\n')
+	}
+
+	private formatRow(values: T): string {
+		return this.columns.map((col) => values[col]).join(',')
+	}
 }
-
-interface User {
-  name: string 
-  score: number 
-}
-
-const users = new DataCollection<User>([
-  {name: 'Kakashi', score: 100},
-  {name: 'Sakura', score: 95},
-  {name: 'Sasuke', score: 90},
-])
-
-users.add({name: 'Naruto', score: 92})
-
-console.log('load one - ', users.loadOne())
-console.log('load one - ', users.loadAll())
-
-
-
-
-
-
-
