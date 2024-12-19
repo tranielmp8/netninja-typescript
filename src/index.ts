@@ -1,36 +1,36 @@
-// Generic Interface
+// Generic Class
 
+class DataCollection<T> {
+  constructor(private data: T[]) {}
 
-// making the interface a generic interface you can add <> and put T or anything you choose in it
-
-interface Collection<T> {
-  data: T[]
-  name: string
+  loadOne(): T {
+    const i = Math.floor(Math.random() * this.data.length)
+    return this.data[i];
+  }
+  loadAll(): T[] {
+    return this.data
+  }
+  add(val: T): T[] {
+    this.data.push(val)
+    return this.data 
+  }
 }
 
-const collectionOne: Collection<string> = {
-  data: ['mario', 'luigi', 'peach'],
-  name: 'Mario Characters'
+interface User {
+  name: string 
+  score: number 
 }
 
-const collectionTwo: Collection<number> = {
-  data: [10, 15, 30, 9, 5, 6],
-  name: 'Winning Lotto Numbers'
-}
+const users = new DataCollection<User>([
+  {name: 'Kakashi', score: 100},
+  {name: 'Sakura', score: 95},
+  {name: 'Sasuke', score: 90},
+])
 
-function randomCollectionItem<T>(c: Collection<T>): T {
-  const i = Math.floor(Math.random() * c.data.length)
+users.add({name: 'Naruto', score: 92})
 
-  return c.data[i]
-}
-
-const resultOne = randomCollectionItem<string>(collectionOne);
-const resultTwo = randomCollectionItem(collectionTwo) // Typescript knows the type bc it was inferred by collectionTwo already having a type
-
-console.log(resultOne);
-console.log(resultTwo);
-
-
+console.log('load one - ', users.loadOne())
+console.log('load one - ', users.loadAll())
 
 
 
