@@ -1,57 +1,36 @@
 
-// Generics 101
+// Intersection Types
 
-function logAndReturnString(val: string): string {
-  console.log(val)
-  return val 
-}
-function logAndReturnNumber(val: number): number {
-  console.log(val)
-  return val 
-}
-function logAndReturnBoolean(val: boolean): boolean {
-  console.log(val)
-  return val 
-}
-
-// function logAndReturnValue(val: any): any {
-//   console.log(val);
-//   return val 
+// type Person = {
+//   firstName: string 
+//   id: number 
 // }
 
-// const result = logAndReturnValue('Hello'); ,<- any type is not ideal for typescript
+// type User = Person & {
+//   email: string 
+// }
 
-function logAndReturnGenericValue<T>(val: T): T {
-  console.log(val);
-  return val
+// Intersection Type Generics
+
+interface HasID {
+  id: number 
 }
 
-const resultOne = logAndReturnGenericValue<string>('kakashi');
-const resultTwo = logAndReturnGenericValue<number>(8);
-const resultThree = logAndReturnGenericValue<boolean>(true);
+ // GENERIC & REPRESENTS THE INTERSECTION OF HasID
+function addIdToValue<T>(val: T): T & HasID {
+  const id = Math.random()
 
-// example 2
-
-function getRandomArrayValue<T>(values: T[]): T {
-  const i = Math.floor(Math.random() * values.length)
-
-  return values[i]
+  return {...val, id}
 }
 
-interface User {
-  name: string
-  score: number 
+interface Post {
+  title: string 
+  thumbsUp: number 
 }
 
-const users: User[] = [
-  {name: 'kakashi', score: 100},
-  {name: 'jaraiyah', score: 90},
-  {name: 'naruto', score: 85},
-  {name: 'sakura', score: 80},
-]
+const post = addIdToValue<Post>({title: 'Super Happy', thumbsUp: 250});
 
-const randomUser = getRandomArrayValue<User>(users)
-console.log(randomUser);
+console.log(post.id, post.title, post.thumbsUp)
 
 
 
