@@ -1,27 +1,33 @@
 "use strict";
-// Generic Class
-class DataCollection {
-    data;
-    constructor(data) {
-        this.data = data;
+//--------------------
+// CSV Writer Project
+//--------------------
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = require("fs");
+class CSVWriter {
+    columns;
+    constructor(columns) {
+        this.columns = columns;
+        this.csv = this.columns.join(',') + '\n';
     }
-    loadOne() {
-        const i = Math.floor(Math.random() * this.data.length);
-        return this.data[i];
+    csv;
+    save(filename) {
+        (0, fs_1.appendFileSync)(filename, this.csv);
+        this.csv = '\n';
+        console.log('file saved to', filename);
     }
-    loadAll() {
-        return this.data;
+    addRows(values) {
+        let rows = values.map((v) => this.formatRow(v));
+        this.csv += rows.join('\n');
+        console.log(this.csv);
     }
-    add(val) {
-        this.data.push(val);
-        return this.data;
+    formatRow(p) {
+        return this.columns.map((col) => p[col]).join(',');
     }
 }
-const users = new DataCollection([
-    { name: 'Kakashi', score: 100 },
-    { name: 'Sakura', score: 95 },
-    { name: 'Sasuke', score: 90 },
+const writer = new CSVWriter(['id', 'amount', 'to', 'notes']);
+writer.addRows([
+    { id: 1, amount: 50, to: 'yoshi', notes: 'for design work' },
+    { id: 2, amount: 75, to: 'mario', notes: 'for web dev work' },
 ]);
-users.add({ name: 'Naruto', score: 92 });
-console.log('load one - ', users.loadOne());
-console.log('load one - ', users.loadAll());
+writer.save('./data/payments.csv');
