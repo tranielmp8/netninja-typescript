@@ -1,36 +1,40 @@
+// Generic Interface
 
-// Intersection Types
 
-// type Person = {
-//   firstName: string 
-//   id: number 
-// }
+// making the interface a generic interface you can add <> and put T or anything you choose in it
 
-// type User = Person & {
-//   email: string 
-// }
-
-// Intersection Type Generics
-
-interface HasID {
-  id: number 
+interface Collection<T> {
+  data: T[]
+  name: string
 }
 
- // GENERIC & REPRESENTS THE INTERSECTION OF HasID
-function addIdToValue<T>(val: T): T & HasID {
-  const id = Math.random()
-
-  return {...val, id}
+const collectionOne: Collection<string> = {
+  data: ['mario', 'luigi', 'peach'],
+  name: 'Mario Characters'
 }
 
-interface Post {
-  title: string 
-  thumbsUp: number 
+const collectionTwo: Collection<number> = {
+  data: [10, 15, 30, 9, 5, 6],
+  name: 'Winning Lotto Numbers'
 }
 
-const post = addIdToValue<Post>({title: 'Super Happy', thumbsUp: 250});
+function randomCollectionItem<T>(c: Collection<T>): T {
+  const i = Math.floor(Math.random() * c.data.length)
 
-console.log(post.id, post.title, post.thumbsUp)
+  return c.data[i]
+}
+
+const resultOne = randomCollectionItem<string>(collectionOne);
+const resultTwo = randomCollectionItem(collectionTwo) // Typescript knows the type bc it was inferred by collectionTwo already having a type
+
+console.log(resultOne);
+console.log(resultTwo);
+
+
+
+
+
+
 
 
 

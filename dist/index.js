@@ -1,9 +1,18 @@
 "use strict";
-// Intersection Types
-// GENERIC & REPRESENTS THE INTERSECTION OF HasID
-function addIdToValue(val) {
-    const id = Math.random();
-    return { ...val, id };
+// Generic Interface
+const collectionOne = {
+    data: ['mario', 'luigi', 'peach'],
+    name: 'Mario Characters'
+};
+const collectionTwo = {
+    data: [10, 15, 30, 9, 5, 6],
+    name: 'Winning Lotto Numbers'
+};
+function randomCollectionItem(c) {
+    const i = Math.floor(Math.random() * c.data.length);
+    return c.data[i];
 }
-const post = addIdToValue({ title: 'Super Happy', thumbsUp: 250 });
-console.log(post.id, post.title, post.thumbsUp);
+const resultOne = randomCollectionItem(collectionOne);
+const resultTwo = randomCollectionItem(collectionTwo); // Typescript knows the type bc it was inferred by collectionTwo already having a type
+console.log(resultOne);
+console.log(resultTwo);
